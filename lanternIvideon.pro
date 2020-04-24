@@ -11,13 +11,18 @@ SOURCES += \
     MainWindow.cpp \
     Library/LanternCommands.cpp \
     Library/LanternProtocolParser.cpp \
-    LanternTcpConnection.cpp
+    LanternTcpConnection.cpp \
+    LanternWidget.cpp
 
 HEADERS += \
     MainWindow.h \
     Library/LanternCommands.h \
     Library/LanternProtocolParser.h \
-    LanternTcpConnection.h
+    LanternTcpConnection.h \
+    LanternWidget.h
 
 FORMS += \
     MainWindow.ui
+
+RESOURCES += \
+    Resources/Lantern.qrc

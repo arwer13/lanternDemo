@@ -3,7 +3,6 @@
 #include <QColor>
 #include <memory>
 
-
 class LanternCommand {
 public:
     typedef unsigned char Type;
@@ -32,22 +31,29 @@ class LanternCommandOn : public LanternCommand {
 public:
     LanternCommandOn();
     virtual void setData(const QByteArray &data) override;
-    virtual QString toString() const override { return "ON"; }
+    virtual QString toString() const override {
+        return "ON";
+    }
 };
-
 
 class LanternCommandOff : public LanternCommand {
 public:
     LanternCommandOff();
     virtual void setData(const QByteArray &data) override;
-    virtual QString toString() const override { return "OFF"; }
+    virtual QString toString() const override {
+        return "OFF";
+    }
 };
 
 class LanternCommandColor : public LanternCommand {
 public:
     LanternCommandColor();
     virtual void setData(const QByteArray &data) override;
-    virtual QString toString() const override { return "COLOR " + _color.name(); }
+    virtual QString toString() const override {
+        return "COLOR " + _color.name();
+    }
+    QColor color() const;
+
 protected:
     QColor _color;
 };

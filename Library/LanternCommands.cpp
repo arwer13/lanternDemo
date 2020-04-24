@@ -50,3 +50,8 @@ void LanternCommandColor::setData(const QByteArray &data) {
     const auto blue = (unsigned char)data[2];
     _color.setRgb(red, green, blue);
 }
+
+QColor LanternCommandColor::color() const
+{
+    return _color;
+}

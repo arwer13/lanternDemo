@@ -12,22 +12,26 @@ public:
     LanternTcpConnection(QObject *parent = nullptr);
     virtual ~LanternTcpConnection();
     QAbstractSocket::SocketState state() const;
+
+    enum class State {
+        Disconnected,
+        Connecting,
+        Connected,
+        Disconnecting,
+    };
+
 signals:
-    void stateChanged(QAbstractSocket::SocketState);
-    void errorOccured(QAbstractSocket::SocketError, QString errorString);
+    void stateChanged(State state);
+    void errorOccured(QString errorString);
     void commandReceived(std::shared_ptr<LanternCommand> command);
-    //    void connected();
-    //    void disconnected();
-    //    void hostFound();
 
 public slots:
-    void connectToServer(const QString &url);
+    void connectToServer(const QString &host, int port);
     void disconnectFromServer();
-    //    void onDisconnected();
-    //    void onError(QAbstractSocket::SocketError err);
 
 protected slots:
-    void onSocketError(QAbstractSocket::SocketError);
+    void onSocketError(QAbstractSocket::SocketError errorType);
+    void onSocketStateChanged(QAbstractSocket::SocketState state);
     void onNewSocketData();
 
 protected:

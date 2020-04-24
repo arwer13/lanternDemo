@@ -1,8 +1,9 @@
 #pragma once
-
+#include "LanternTcpConnection.h"
 #include <QMainWindow>
+#include <memory>
 
-class LanternTcpConnection;
+class LanternWidget;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -15,10 +16,27 @@ class MainWindow : public QMainWindow {
 
 public:
     MainWindow(QWidget *parent = nullptr);
+
+    //! Connect to LanternTcpConnection signals
+    //! LanternTcpConnection is supposed to me in inconnected state
     void setConnection(LanternTcpConnection *connection);
-    ~MainWindow();
+
+    virtual ~MainWindow();
+
+public slots:
+    void onCommand(std::shared_ptr<LanternCommand> command);
+    void onLanternConnectionStateChanged(LanternTcpConnection::State state);
+    void onLanternConnectionError(const QString &message);
 
 private:
     Ui::MainWindow *ui;
     LanternTcpConnection *_connection = nullptr;
+    LanternWidget *_lantern = nullptr;
+
+    //! Try to read host and port from url string. If fails return false.
+    //! Url string format is supposed to be: "<host>:<port>"
+    static bool _parseHostAndPort(const QString &url, QString &host, int &port);
+
+    //! Set initial state of the main window
+    void _setInitialState();
 };
