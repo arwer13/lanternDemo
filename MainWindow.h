@@ -17,8 +17,13 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = nullptr);
 
-    //! Connect to LanternTcpConnection signals
-    //! LanternTcpConnection is supposed to me in inconnected state
+    /**
+     * @brief Attach connection to the MainWindow. Call only once
+     * @param connection Musn't be nullptr
+     *
+     * If called more than once does no check and sets the state and
+     * connects to the given connectin events
+     */
     void setConnection(LanternTcpConnection *connection);
 
     virtual ~MainWindow();

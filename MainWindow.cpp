@@ -8,7 +8,6 @@
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent)
         , ui(new Ui::MainWindow) {
-
     ui->setupUi(this);
     _lantern = new LanternWidget(this);
     ui->lanternWidget->layout()->addWidget(_lantern);
@@ -17,7 +16,9 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 void MainWindow::setConnection(LanternTcpConnection *connection) {
+    assert(connection);
     _connection = connection;
+
     // GUI EVENTS POPAGATION
     connect(ui->btnConnect, &QPushButton::clicked, [this]() {
         QString host;
@@ -38,6 +39,7 @@ void MainWindow::setConnection(LanternTcpConnection *connection) {
         &MainWindow::onLanternConnectionStateChanged);
     connect(_connection, &LanternTcpConnection::errorOccured, this,
         &MainWindow::onLanternConnectionError);
+    onLanternConnectionStateChanged(_connection->state());
 }
 
 MainWindow::~MainWindow() {

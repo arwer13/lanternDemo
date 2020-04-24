@@ -17,8 +17,8 @@ LanternTcpConnection::LanternTcpConnection(QObject *parent)
 LanternTcpConnection::~LanternTcpConnection() {
 }
 
-QAbstractSocket::SocketState LanternTcpConnection::state() const {
-    return _socket->state();
+LanternTcpConnection::State LanternTcpConnection::state() const {
+    return _state;
 }
 
 void LanternTcpConnection::connectToServer(const QString &host, int port) {
@@ -37,24 +37,25 @@ void LanternTcpConnection::onSocketError(QAbstractSocket::SocketError error) {
 void LanternTcpConnection::onSocketStateChanged(QAbstractSocket::SocketState state) {
     switch (state) {
     case QAbstractSocket::SocketState::UnconnectedState:
-        emit stateChanged(State::Disconnected);
+        _state = State::Disconnected;
         break;
     case QAbstractSocket::SocketState::HostLookupState:
     case QAbstractSocket::SocketState::ConnectingState:
-        emit stateChanged(State::Connecting);
+        _state = State::Connecting;
         break;
     case QAbstractSocket::SocketState::ConnectedState:
-        emit stateChanged(State::Connected);
+        _state = State::Connected;
         break;
     case QAbstractSocket::SocketState::ClosingState:
-        emit stateChanged(State::Disconnecting);
+        _state = State::Disconnecting;
         break;
     case QAbstractSocket::BoundState:
     case QAbstractSocket::ListeningState:
-        emit stateChanged(State::Disconnected);
+        _state = State::Disconnected;
         qWarning() << "Unexpected socket state " << state;
         break;
     }
+    emit stateChanged(_state);
 }
 
 void LanternTcpConnection::onNewSocketData() {

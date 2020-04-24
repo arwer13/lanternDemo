@@ -14,7 +14,6 @@ class LanternTcpConnection : public QObject {
 public:
     LanternTcpConnection(QObject *parent = nullptr);
     virtual ~LanternTcpConnection();
-    QAbstractSocket::SocketState state() const;
 
     enum class State {
         Disconnected,
@@ -22,6 +21,8 @@ public:
         Connected,
         Disconnecting,
     };
+
+    State state() const;
 
 signals:
     void stateChanged(State state);
@@ -40,4 +41,5 @@ protected slots:
 protected:
     QTcpSocket *_socket = nullptr;
     std::unique_ptr<LanternProtocolParser> _parser;
+    State _state = State::Disconnected;
 };
