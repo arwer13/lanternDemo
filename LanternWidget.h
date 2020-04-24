@@ -20,9 +20,26 @@ public:
 
 protected:
     static std::unique_ptr<QPixmap> _imageFullSize;
+    static std::unique_ptr<QImage> _imageMaskFullSize;
 
-    //! Cache of the image ready for drawing
-    QPixmap _pixmapCache;
+    //! Cache of
+    struct PaintCache {
+        //! Image of the lantern
+        QPixmap lantern;
+
+        //! Region of light
+        QRegion lightRegion;
+
+        //! Size of widget for which the cache is calculated
+        QSize widgetSize;
+
+        //! Pixmap rect
+        QRectF rect;
+
+    } _paintCache;
+
+    //! Update the cache if sizes differ
+    void _updatePaintCacheIfNeeded(const QSize newSize);
 
     //! Color of the lantern
     QColor _color;

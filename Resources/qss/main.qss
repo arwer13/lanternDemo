@@ -47,7 +47,7 @@ QStatusBar QLabel {
 }
 
 QStatusBar {
-    background-color: beigewheat;
+    background-color: khaki;
 }
 
 QStatusBar::item {

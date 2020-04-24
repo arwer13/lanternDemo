@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>lantern2.png</file>
+        <file>lantern.png</file>
+        <file>lanternLightMask.png</file>
     </qresource>
 </RCC>
