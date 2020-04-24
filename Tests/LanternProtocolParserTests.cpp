@@ -8,6 +8,7 @@
 std::vector<LanternCommand::Type> g_commandFullOn{0x12, 0x00, 0x00};
 std::vector<LanternCommand::Type> g_commandFullOff{0x13, 0x00, 0x00};
 std::vector<LanternCommand::Type> g_commandFullColorRed{0x20, 0x00, 0x03, 0xff, 0x00, 0x00};
+std::vector<LanternCommand::Type> g_commandFullUnknown{0x99, 0x00, 0x00};
 
 static QByteArray toByteArray(const std::vector<LanternCommand::Type> &v) {
     return QByteArray(reinterpret_cast<const char *>(v.data()), v.size());
@@ -45,4 +46,11 @@ void LanternProtocolParserTests::testSingleColorCommand() {
     auto command = parser.fetch();
     QVERIFY(command);
     QVERIFY(command->type() == LanternCommand::typeColor);
+}
+
+void LanternProtocolParserTests::testUnknownCommand() {
+    LanternProtocolParser parser;
+    parser.parse(toByteArray(g_commandFullUnknown));
+    auto command = parser.fetch();
+    QVERIFY(dynamic_cast<LanternUnknownCommand *>(command.get()));
 }

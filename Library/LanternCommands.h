@@ -27,6 +27,7 @@ protected:
     Type _type = typeInvalid;
 };
 
+//! Command to turn lantern on
 class LanternCommandOn : public LanternCommand {
 public:
     LanternCommandOn();
@@ -36,6 +37,7 @@ public:
     }
 };
 
+//! Command to turn lantern off
 class LanternCommandOff : public LanternCommand {
 public:
     LanternCommandOff();
@@ -45,6 +47,7 @@ public:
     }
 };
 
+//! Command to set lantern's color
 class LanternCommandColor : public LanternCommand {
 public:
     LanternCommandColor();
@@ -56,4 +59,16 @@ public:
 
 protected:
     QColor _color;
+};
+
+//! Unknown command stub. Created when type is unknown to comman factory in LanternCommand
+class LanternUnknownCommand : public LanternCommand {
+public:
+    LanternUnknownCommand();
+    virtual void setData(const QByteArray &data) override;
+    virtual QString toString() const override {
+        return "<UNKNOWN> with data size " + QString::number(_data.size());
+    }
+protected:
+    QByteArray _data;
 };

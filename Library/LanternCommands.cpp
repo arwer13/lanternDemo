@@ -10,7 +10,7 @@ std::shared_ptr<LanternCommand> LanternCommand::createCommand(LanternCommand::Ty
     } else if (typeColor == commandType) {
         result.reset(new LanternCommandColor());
     } else {
-        assert(false); // TODO
+        result.reset(new LanternUnknownCommand());
     }
     return result;
 }
@@ -24,7 +24,8 @@ LanternCommandOn::LanternCommandOn() {
 }
 
 void LanternCommandOn::setData(const QByteArray &data) {
-    assert(false); //! TODO
+    Q_UNUSED(data)
+    qWarning() << "An attempt to set data to LanternCommandOn which doesn't accept any data";
 }
 
 LanternCommandOff::LanternCommandOff() {
@@ -32,6 +33,8 @@ LanternCommandOff::LanternCommandOff() {
 }
 
 void LanternCommandOff::setData(const QByteArray &data) {
+    Q_UNUSED(data)
+    qWarning() << "An attempt to set data to LanternCommandOff which doesn't accept any data";
 }
 
 LanternCommandColor::LanternCommandColor() {
@@ -51,7 +54,13 @@ void LanternCommandColor::setData(const QByteArray &data) {
     _color.setRgb(red, green, blue);
 }
 
-QColor LanternCommandColor::color() const
-{
+QColor LanternCommandColor::color() const {
     return _color;
+}
+
+LanternUnknownCommand::LanternUnknownCommand() {
+}
+
+void LanternUnknownCommand::setData(const QByteArray &data) {
+    _data = data;
 }

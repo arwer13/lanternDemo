@@ -26,7 +26,7 @@ void MainWindow::setConnection(LanternTcpConnection *connection) {
             return;
         }
         _connection->connectToServer(host, port);
-        ui->connectionError->clear();
+        ui->errorMessage->clear();
     });
     connect(ui->btnDisconnect, &QPushButton::clicked,
         [this]() { _connection->disconnectFromServer(); });
@@ -55,6 +55,8 @@ void MainWindow::onCommand(std::shared_ptr<LanternCommand> command) {
     } else if (auto commandOff = dynamic_cast<LanternCommandOff *>(command.get())) {
         Q_UNUSED(commandOff)
         _lantern->turnOff();
+    } else {
+        ui->errorMessage->setText(tr("Got unknown GUI command ") + command->toString());
     }
 }
 
@@ -72,7 +74,7 @@ void MainWindow::onLanternConnectionStateChanged(LanternTcpConnection::State sta
         break;
     case LanternTcpConnection::State::Connected:
         ui->connectionStatus->setText(tr("Connected"));
-        ui->connectionError->clear();
+        ui->errorMessage->clear();
         ui->serverUrl->setEnabled(false);
         ui->btnDisconnect->setEnabled(true);
         break;
@@ -85,7 +87,7 @@ void MainWindow::onLanternConnectionStateChanged(LanternTcpConnection::State sta
 }
 
 void MainWindow::onLanternConnectionError(const QString &message) {
-    ui->connectionError->setText(message);
+    ui->errorMessage->setText(message);
 }
 
 bool MainWindow::_parseHostAndPort(const QString &url, QString &host, int &port) {
@@ -103,5 +105,5 @@ bool MainWindow::_parseHostAndPort(const QString &url, QString &host, int &port)
 
 void MainWindow::_setInitialState() {
     onLanternConnectionStateChanged(LanternTcpConnection::State::Disconnected);
-    ui->connectionError->clear();
+    ui->errorMessage->clear();
 }

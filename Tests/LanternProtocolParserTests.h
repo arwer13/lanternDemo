@@ -10,4 +10,5 @@ private slots:
     void testSingleOnCommand();
     void testSingleOffCommand();
     void testSingleColorCommand();
+    void testUnknownCommand();
 };
