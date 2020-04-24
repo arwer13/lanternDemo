@@ -6,6 +6,9 @@
 class LanternProtocolParser;
 class LanternCommand;
 
+/**
+ * @brief Class for communication in Lantern Ptorocol through TCP connection
+ */
 class LanternTcpConnection : public QObject {
     Q_OBJECT
 public:

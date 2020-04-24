@@ -47,11 +47,8 @@ void LanternCommandColor::setData(const QByteArray &data) {
         qWarning() << "Attempt to set invalid data to LanternCommandColor" << data;
         return;
     }
-    // TODO
-    const auto red = (unsigned char)data[0];
-    const auto green = (unsigned char)data[1];
-    const auto blue = (unsigned char)data[2];
-    _color.setRgb(red, green, blue);
+    auto bytes = reinterpret_cast<const unsigned char *>(data.data());
+    _color.setRgb(bytes[0], bytes[1], bytes[2]);
 }
 
 QColor LanternCommandColor::color() const {

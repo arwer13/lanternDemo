@@ -3,6 +3,7 @@
 #include <QColor>
 #include <memory>
 
+//! Interface and a factory for lantern commands
 class LanternCommand {
 public:
     typedef unsigned char Type;
@@ -61,7 +62,12 @@ protected:
     QColor _color;
 };
 
-//! Unknown command stub. Created when type is unknown to comman factory in LanternCommand
+
+/**
+ * @brief A class for commands of type unknown to the factory
+ *
+ * Keeps command type and command payload, but doesn't parse it.
+ */
 class LanternUnknownCommand : public LanternCommand {
 public:
     LanternUnknownCommand();

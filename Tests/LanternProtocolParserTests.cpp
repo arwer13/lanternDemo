@@ -4,7 +4,6 @@
 #include <QTest>
 #include <vector>
 
-// const char g_commandFullOn[]{0x12, 0x00, 0x00};
 std::vector<LanternCommand::Type> g_commandFullOn{0x12, 0x00, 0x00};
 std::vector<LanternCommand::Type> g_commandFullOff{0x13, 0x00, 0x00};
 std::vector<LanternCommand::Type> g_commandFullColorRed{0x20, 0x00, 0x03, 0xFF, 0x00, 0x00};

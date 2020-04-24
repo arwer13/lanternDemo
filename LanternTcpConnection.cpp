@@ -3,13 +3,11 @@
 #include "Library/LanternProtocolParser.h"
 
 LanternTcpConnection::LanternTcpConnection(QObject *parent)
-        : QObject(parent) {
-    _socket = new QTcpSocket(this);
-    _parser.reset(new LanternProtocolParser());
-
+        : QObject(parent)
+        , _socket(new QTcpSocket(this))
+        , _parser(new LanternProtocolParser()) {
     connect(_socket, &QAbstractSocket::stateChanged, this,
         &LanternTcpConnection::onSocketStateChanged);
-    // TODO: Why had to convert signature?
     connect(_socket,
         static_cast<void (QAbstractSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::error),
         this, &LanternTcpConnection::onSocketError);
@@ -60,8 +58,7 @@ void LanternTcpConnection::onSocketStateChanged(QAbstractSocket::SocketState sta
 }
 
 void LanternTcpConnection::onNewSocketData() {
-    const auto chunk = _socket->readAll();
-    _parser->parse(chunk);
+    _parser->parse(_socket->readAll());
     while (auto command = _parser->fetch()) {
         emit commandReceived(command);
     }

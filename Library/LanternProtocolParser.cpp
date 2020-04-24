@@ -1,5 +1,6 @@
 #include "LanternProtocolParser.h"
 #include "LanternCommands.h"
+#include <QDebug>
 
 LanternProtocolParser::LanternProtocolParser() {
 }
@@ -25,7 +26,7 @@ void LanternProtocolParser::_processByte(char byte) {
     case State::WaitForType:
         assert(!_command);
         assert(_dataBuffer.isEmpty());
-        _command = LanternCommand::createCommand(byte);
+        _command = LanternCommand::createCommand(reinterpret_cast<LanternCommand::Type &>(byte));
         _state = State::WaitForLength;
         _dataLeftSize = numBytesForLengthField;
         break;
@@ -65,13 +66,14 @@ void LanternProtocolParser::_finalizeCommandParsing() {
 }
 
 uint16_t LanternProtocolParser::_readBigEndian(const QByteArray &data) {
+    // NB: If need multiple types Big Endian conversion consider writing common templated function
     if (data.size() != 2) {
         assert(false);
-        // TODO: Error
+        qWarning() << "An attempt to parse uint16_t from byte array of size " << data.size();
         return 0;
     }
     uint16_t result;
-    auto resultPtr = (char *)&result;
+    auto resultPtr = reinterpret_cast<char *>(&result);
     resultPtr[0] = data[1];
     resultPtr[1] = data[0];
     return result;

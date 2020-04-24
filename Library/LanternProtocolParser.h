@@ -15,7 +15,6 @@ public:
     //! Fetch next command parsed or empty pointer if no command is ready
     std::shared_ptr<LanternCommand> fetch();
 
-    // TODO: API for error
 protected:
     enum class State {
         WaitForType,
@@ -24,7 +23,8 @@ protected:
     } _state
         = State::WaitForType;
 
-    static const constexpr int numBytesForLengthField = sizeof(uint16_t);
+    typedef uint16_t LengthFieldType;
+    static const constexpr int numBytesForLengthField = sizeof(LengthFieldType);
 
     void _processByte(char byte);
 
