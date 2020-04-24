@@ -36,6 +36,9 @@
           <property name="text">
            <string>emb2.extcam.xyz:9991</string>
           </property>
+          <property name="placeholderText">
+           <string>&lt;host&gt;:&lt;port&gt;</string>
+          </property>
          </widget>
         </item>
         <item>

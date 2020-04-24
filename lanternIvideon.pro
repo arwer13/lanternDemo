@@ -25,4 +25,5 @@ FORMS += \
     MainWindow.ui
 
 RESOURCES += \
-    Resources/Lantern.qrc
+    Resources/Lantern.qrc \
+    Resources/stylesheet.qrc

@@ -43,7 +43,11 @@ QLabel, QAbstractButton {
 
 /* Bold text on status bar looks awful. */
 QStatusBar QLabel {
-   font: normal;
+    font: normal;
+}
+
+QStatusBar {
+    background-color: beigewheat;
 }
 
 QStatusBar::item {
