@@ -20,7 +20,9 @@ public:
 
 protected:
     static std::unique_ptr<QPixmap> _imageFullSize;
-    QPixmap _pixmap;
+
+    //! Cache of the image ready for drawing
+    QPixmap _pixmapCache;
 
     //! Color of the lantern
     QColor _color;

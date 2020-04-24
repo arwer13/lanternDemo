@@ -17,12 +17,17 @@ LanternWidget::LanternWidget(QWidget *parent)
 void LanternWidget::paintEvent(QPaintEvent *event) {
     Q_UNUSED(event)
     QPainter painter(this);
-    _pixmap = _imageFullSize->scaled(width(), height(), Qt::AspectRatioMode::KeepAspectRatio);
-    const auto pixmapRect = QRect(0, 0, _pixmap.width(), _pixmap.height());
+    // TODO: Don't scale the pixmap on every paintEvent
+    _pixmapCache = _imageFullSize->scaled(width(), height(), Qt::AspectRatioMode::KeepAspectRatio);
+    const auto shift
+        = 0.5 * QPointF(width() - _pixmapCache.width(), height() - _pixmapCache.height());
+    const auto pixmapRect = QRectF(shift, _pixmapCache.size());
     if (_isOn) {
         painter.fillRect(pixmapRect, QBrush(_color));
+    } else {
+        painter.fillRect(pixmapRect, QBrush(_color, Qt::BrushStyle::Dense7Pattern));
     }
-    painter.drawPixmap(pixmapRect, _pixmap);
+    painter.drawPixmap(pixmapRect.toRect(), _pixmapCache);
 }
 
 void LanternWidget::setColor(const QColor &color) {
