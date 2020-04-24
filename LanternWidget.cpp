@@ -6,7 +6,7 @@
 std::unique_ptr<QPixmap> LanternWidget::_imageFullSize;
 
 LanternWidget::LanternWidget(QWidget *parent)
-    : QWidget(parent) {
+        : QWidget(parent) {
     if (!_imageFullSize) {
         _imageFullSize.reset(new QPixmap(":/lantern2.png"));
         assert(!_imageFullSize->isNull());

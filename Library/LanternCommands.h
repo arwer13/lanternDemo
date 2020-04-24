@@ -69,6 +69,7 @@ public:
     virtual QString toString() const override {
         return "<UNKNOWN> with data size " + QString::number(_data.size());
     }
+
 protected:
     QByteArray _data;
 };

@@ -3,7 +3,7 @@
 #include "Library/LanternProtocolParser.h"
 
 LanternTcpConnection::LanternTcpConnection(QObject *parent)
-    : QObject(parent) {
+        : QObject(parent) {
     _socket = new QTcpSocket(this);
     _parser.reset(new LanternProtocolParser());
 
