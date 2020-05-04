@@ -38,9 +38,12 @@ private:
     LanternTcpConnection *_connection = nullptr;
     LanternWidget *_lantern = nullptr;
 
-    //! Try to read host and port from url string. If fails return false.
-    //! Url string format is supposed to be: "<host>:<port>"
-    static bool _parseHostAndPort(const QString &url, QString &host, int &port);
+	/**
+	 * @brief Try to read host and port from url string. If fails return false._parseHostAndPort
+	 * @param url Format is supposed to be: "<host>:<port>"
+	 * @return Tuple as <host, port, isOk>
+	 */
+	static std::tuple<QString, int, bool> _parseHostAndPort(const QString &url);
 
     //! Set initial state of the main window
     void _setInitialState();

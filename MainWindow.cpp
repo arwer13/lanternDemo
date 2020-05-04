@@ -21,9 +21,8 @@ void MainWindow::setConnection(LanternTcpConnection *connection) {
 
     // GUI EVENTS POPAGATION
     connect(ui->btnConnect, &QPushButton::clicked, [this]() {
-        QString host;
-        int port;
-        if (!_parseHostAndPort(ui->serverUrl->text(), host, port)) {
+		const auto [host, port, isParsed] = _parseHostAndPort(ui->serverUrl->text());
+		if (!isParsed) {
             ui->connectionStatus->setText(tr("Invalid server and port string"));
             return;
         }
@@ -49,14 +48,12 @@ MainWindow::~MainWindow() {
 void MainWindow::onCommand(std::shared_ptr<LanternCommand> command) {
     ui->statusbar->showMessage("Got: " + command->toString(), 3000);
 
-    if (auto commandColor = dynamic_cast<LanternCommandColor *>(command.get())) {
-        const auto newColor = commandColor->color();
-        _lantern->setColor(newColor);
-    } else if (auto commandOn = dynamic_cast<LanternCommandOn *>(command.get())) {
-        Q_UNUSED(commandOn)
+	if (command->type() == LanternCommand::typeColor) {
+		const auto commandColor = dynamic_cast<const LanternCommandColor *>(command.get());
+		_lantern->setColor(commandColor->color());
+	} else if (command->type() == LanternCommand::typeOn) {
         _lantern->turnOn();
-    } else if (auto commandOff = dynamic_cast<LanternCommandOff *>(command.get())) {
-        Q_UNUSED(commandOff)
+	} else if (command->type() == LanternCommand::typeOff) {
         _lantern->turnOff();
     } else {
         ui->errorMessage->setText(tr("Got unknown GUI command ") + command->toString());
@@ -97,18 +94,19 @@ void MainWindow::onLanternConnectionError(const QString &message) {
     ui->errorMessage->setText(message);
 }
 
-bool MainWindow::_parseHostAndPort(const QString &url, QString &host, int &port) {
-    const QRegularExpression pattern(R"((.+):(\d+))");
+std::tuple<QString, int, bool> MainWindow::_parseHostAndPort(const QString &url) {
+	static const auto emptyResult = std::make_tuple(QString(), -1, false);
+	static const QRegularExpression pattern(R"((.+):(\d+))");
     const auto match = pattern.match(url.trimmed());
     if (!match.isValid()) {
-        return false;
+		return emptyResult;
     }
     bool isOk;
-    host = match.captured(1);
-    port = match.captured(2).toInt(&isOk);
+	QString host = match.captured(1);
+	int port = match.captured(2).toInt(&isOk);
     if (host.isEmpty() || !isOk)
-        return false;
-    return true;
+		return emptyResult;
+	return {host, port, true};
 }
 
 void MainWindow::_setInitialState() {
